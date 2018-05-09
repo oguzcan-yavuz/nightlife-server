@@ -1,0 +1,42 @@
+{
+  "name": "nightlife-server",
+  "version": "1.0.0",
+  "description": "Freecodecamp Dynamic Web Application Project: Build a Nightlife Coordination App (Back-end)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "nodemon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yavuzovski/nightlife-server.git"
+  },
+  "keywords": [
+    "nightlife",
+    "freecodecamp",
+    "server",
+    "nodejs",
+    "backend"
+  ],
+  "author": "Oğuzcan Yavuz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yavuzovski/nightlife-server/issues"
+  },
+  "homepage": "https://github.com/yavuzovski/nightlife-server#readme",
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.17",
+    "passport": "^0.4.0",
+    "passport-twitter": "^1.0.4"
+  },
+  "engines": {
+    "node": "9.11.1"
+  }
+}
