@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 const search = require('../api/search.js');
@@ -11,6 +13,6 @@ function isLoggedIn (req, res, next) {
 }
 
 // home router
-router.get('/api/search', search);
+router.post('/api/search', search);
 
 module.exports = router;
