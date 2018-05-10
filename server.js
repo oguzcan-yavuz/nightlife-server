@@ -4,10 +4,9 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');   // dev only
-// require('./app/config/db.js').connectDB();   // create db connection
+require(path.join(__dirname, 'app', 'config', 'db.js'))();    // create db connection
 // const session = require('./app/config/session');
 // const passport = require('./app/config/passport.js');
-// const router = require('./app/routes/index.js');
 const router = require(path.join(__dirname, 'app', 'routes', 'index.js'));
 const PORT = process.env.PORT || 8080;
 let app = express();
