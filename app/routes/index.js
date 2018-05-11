@@ -2,17 +2,31 @@
 
 const express = require('express');
 const router = express.Router();
-const search = require('../api/search.js');
+const searchVenues = require('../api/searchVenues.js');
+const goingPeople = require('../api/goingPeople.js');
 
-function isLoggedIn (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    res.json({ error: "Unauthorized user"});
+module.exports = (passport) => {
+  function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated())
+      return next();
   }
-}
 
-// home router
-router.post('/api/search', search);
+  // health check
+  router.get('/health-check', (req, res) => {
+    res.json("Server is up!");
+  });
 
-module.exports = router;
+  // search venues
+  router.post('/api/search', searchVenues);
+
+  // post goingPeople
+  router.post('/api/goingPeople', isLoggedIn, goingPeople.addGoingPeople);
+
+  // twitter auth
+  router.get('/auth/twitter', passport.authenticate('twitter'));
+
+  // TODO: twitter auth callback
+
+  return router;
+};
+
