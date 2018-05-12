@@ -29,7 +29,6 @@ passport.use(new TwitterStrategy({
             return done(null, user);
           else {
             let newUser = new Users();
-            console.log("profile keys:", Object.keys(profile));
             newUser.twitter.id = profile.id;
             newUser.twitter.username = profile.username;
             newUser.twitter.displayName = profile.displayName;

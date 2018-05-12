@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "nodemon": "nodemon server.js"
+    "nodemon": "nodemon --ignore sessions/ server.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,8 @@
     "mongoose": "^5.0.17",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
+    "session-file-store": "^1.2.0",
+    "uuid": "^3.2.1",
     "yelp-fusion": "^2.0.3"
   },
   "engines": {
