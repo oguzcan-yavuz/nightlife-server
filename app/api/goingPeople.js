@@ -1,28 +1,42 @@
 'use strict';
 
-const venue = require('../models/venue.js');
+const Venue = require('../models/venue.js');
 
-async function getGoingPeople(venueId) {
+async function getVenue(venueId) {
   let query = { venueId: venueId };
-  return await venue.findOne(query);
+  return Venue.findOne(query);
 }
 
-async function isGoing(venueId, userId) {
-  let goingPeople = await getGoingPeople(venueId);
-  return goingPeople.indexOf(userId) !== -1
+async function updateDb(venueId, isGoing, userId) {
+  let query = { venueId: venueId };
+  let doc = (isGoing) ? { $pull: { goingPeople: userId } } : { $push: { goingPeople: userId } };
+  let options = { new: true, fields: { _id: 0, goingPeople: 1 } };
+  return Venue.findOneAndUpdate(query, doc, options);
 }
 
-async function addGoingPeople(req, res) {
-  // await venue.insertMany([{ venueId: "XE45D1tUfjJg1I5AN8cylw", goingPeople: ["mahmut", "osman"]}, {venueId: "J_4lCEEaTG6qUsu8SloOUQ", goingPeople: ["murtaza"]}]);
-  // let venueId = req.body.venueId;
-  // if(isGoing(venueId, req.user.twitter.id)) {
-  //   // push the user to goingPeople and return the new goingPeople
-  // } else {
-  //   // pull the user from goingPeople and return the new goingPeople
-  // }
-  console.log(req.user);
-  console.log(req.body);
-  res.json({ test: "it's working?" });
+async function insertDb(venueId, userId) {
+  return Venue.insertMany({ venueId: venueId, goingPeople: [userId] });
 }
 
-module.exports = { getGoingPeople, addGoingPeople };
+async function getCount(venueId, userId) {
+  let venue = await getVenue(venueId);
+  let count;
+  if(venue !== null) {
+    let isGoing = venue.goingPeople.indexOf(userId) !== -1;
+    let goingPeople = await updateDb(venueId, isGoing, userId);
+    count = (goingPeople !== null) ? goingPeople.goingPeople.length : 0;
+  } else {
+    await insertDb(venueId, userId);
+    count = 1;
+  }
+  return count;
+}
+
+async function updateGoingPeople(req, res) {
+  let venueId = req.body.venueId;
+  let userId = req.body.userId;
+  let count = await getCount(venueId, userId);
+  res.json({ goingPeopleCount: count });
+}
+
+module.exports = { getVenue, updateGoingPeople };

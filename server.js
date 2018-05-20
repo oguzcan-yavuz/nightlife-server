@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const logger = require('morgan');
 const cors = require('cors');
 const session = require(path.join(__dirname, 'app', 'config', 'session.js'));
 const passport = require(path.join(__dirname, 'app', 'config', 'passport.js'));
@@ -17,9 +18,11 @@ mongoose.connect(MONGO_URI);
 const corsOptions = {
   credentials: true,
   origin: true,
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  exposedHeaders: ['x-auth-token']
 };
 
+app.use(logger('dev'));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

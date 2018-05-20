@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-  'twitterAuth': {
-    'consumerKey': process.env.TWITTER_KEY,
-    'consumerSecret': process.env.TWITTER_SECRET,
-    'callbackURL': process.env.TWITTER_CALLBACK
+  'googleAuth': {
+    'clientID': process.env.GOOGLE_KEY,
+    'clientSecret': process.env.GOOGLE_SECRET,
+    'callbackURL': process.env.GOOGLE_CALLBACK
   }
 };

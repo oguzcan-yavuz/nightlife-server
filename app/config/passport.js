@@ -1,7 +1,7 @@
 'use strict';
 
 const passport = require('passport');
-const TwitterStrategy = require('passport-twitter').Strategy;
+const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const authConfig = require('./auth.js');
 const Users = require('../models/user.js');
 
@@ -15,33 +15,14 @@ passport.deserializeUser((id, done) => {
   })
 });
 
-passport.use(new TwitterStrategy({
-    consumerKey: authConfig.twitterAuth.consumerKey,
-    consumerSecret: authConfig.twitterAuth.consumerSecret,
-    callbackURL: authConfig.twitterAuth.callbackURL
+passport.use(new GoogleTokenStrategy({
+    clientID: authConfig.googleAuth.clientID,
+    clientSecret: authConfig.googleAuth.clientSecret
   },
-  (token, refreshToken, profile, done) => {
-      process.nextTick(() => {
-        Users.findOne({ 'twitter.id': profile.id }, (err, user) => {
-          if(err)
-            return done(err);
-          if(user)
-            return done(null, user);
-          else {
-            let newUser = new Users();
-            newUser.twitter.id = profile.id;
-            newUser.twitter.username = profile.username;
-            newUser.twitter.displayName = profile.displayName;
-            newUser.save(err => {
-              if(err)
-                return done(err);
-              return done(null, newUser);
-            })
-          }
-        })
-      })
-    }
-  )
-);
+  function (accessToken, refreshToken, profile, done) {
+    Users.upsertGoogleUser(accessToken, refreshToken, profile, function(err, user) {
+      return done(err, user);
+    });
+}));
 
 module.exports = passport;
